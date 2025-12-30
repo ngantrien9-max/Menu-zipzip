@@ -5,94 +5,36 @@ local player = Players.LocalPlayer
 
 -- GUI
 local gui = Instance.new("ScreenGui")
-gui.Name = "HitboxGui"
-gui.ResetOnSpawn = false
+gui.Name = "HitboxGUI"
+gui.ResetOnSpawn = true
 gui.Parent = player:WaitForChild("PlayerGui")
 
--- FRAME
-local frame = Instance.new("Frame")
-frame.Size = UDim2.fromOffset(150, 60)
-frame.Position = UDim2.fromScale(0.02, 0.4) -- góc trái
-frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-frame.Active = true
-frame.Draggable = true
-frame.Parent = gui
+-- Button
+local button = Instance.new("TextButton")
+button.Size = UDim2.fromOffset(140, 40)
+button.Position = UDim2.fromScale(0.45, 0.45)
+button.Text = "HITBOX : OFF"
+button.TextSize = 18
+button.Font = Enum.Font.SourceSansBold
+button.TextColor3 = Color3.new(1,1,1)
+button.BackgroundColor3 = Color3.fromRGB(200,50,50)
+button.Parent = gui
+button.Active = true
+button.Draggable = true
 
 -- Bo góc
 local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 10)
-corner.Parent = frame
-
--- BUTTON
-local button = Instance.new("TextButton")
-button.Size = UDim2.fromScale(1, 1)
-button.Text = "HITBOX : OFF"
-button.Font = Enum.Font.SourceSansBold
-button.TextSize = 18
-button.TextColor3 = Color3.new(1, 1, 1)
-button.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-button.Parent = frame
+corner.CornerRadius = UDim.new(0, 12)
+corner.Parent = button
 
 -- DATA
 local enabled = false
 local hitboxes = {}
 
 -- Tạo hitbox
-local function createHitbox(char)
-	local hrp = char:FindFirstChild("HumanoidRootPart")
+local function createHitbox(character)
+	local hrp = character:FindFirstChild("HumanoidRootPart")
 	if not hrp then return end
-	if hitboxes[char] then return end
-
-	local box = Instance.new("BoxHandleAdornment")
-	box.Name = "Hitbox"
-	box.Size = Vector3.new(6, 7, 6)
-	box.Adornee = hrp
-	box.AlwaysOnTop = true
-	box.ZIndex = 10
-	box.Transparency = 0.5
-	box.Color3 = Color3.fromRGB(255, 0, 0)
-	box.Parent = hrp
-
-	hitboxes[char] = box
-end
-
--- Xoá hitbox
-local function removeHitboxes()
-	for _, v in pairs(hitboxes) do
-		if v then v:Destroy() end
-	end
-	hitboxes = {}
-end
-
--- Toggle
-button.MouseButton1Click:Connect(function()
-	enabled = not enabled
-
-	if enabled then
-		button.Text = "HITBOX : ON"
-		button.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
-
-		for _, plr in pairs(Players:GetPlayers()) do
-			if plr.Character then
-				createHitbox(plr.Character)
-			end
-		end
-	else
-		button.Text = "HITBOX : OFF"
-		button.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-		removeHitboxes()
-	end
-end)
-
--- Player mới vào
-Players.PlayerAdded:Connect(function(plr)
-	plr.CharacterAdded:Connect(function(char)
-		if enabled then
-			task.wait(1)
-			createHitbox(char)
-		end
-	end)
-end)	if not hrp then return end
 
 	if hitboxes[character] then return end
 
@@ -141,118 +83,6 @@ end
 button.MouseButton1Click:Connect(toggleHitbox)
 
 -- Người chơi mới vào
-Players.PlayerAdded:Connect(function(plr)
-	plr.CharacterAdded:Connect(function(char)
-		if enabled then
-			task.wait(1)
-			createHitbox(char)
-		end
-	end)
-end)	if not hrp then return end
-	if hitboxes[char] then return end
-
-	local box = Instance.new("BoxHandleAdornment")
-	box.Name = "Hitbox"
-	box.Size = Vector3.new(6, 7, 6)
-	box.Adornee = hrp
-	box.AlwaysOnTop = true
-	box.ZIndex = 10
-	box.Transparency = 0.5
-	box.Color3 = Color3.fromRGB(255, 0, 0)
-	box.Parent = hrp
-
-	hitboxes[char] = box
-end
-
--- Xoá hitbox
-local function removeHitboxes()
-	for _, v in pairs(hitboxes) do
-		if v then v:Destroy() end
-	end
-	hitboxes = {}
-end
-
--- Toggle
-local function toggleHitbox()
-	enabled = not enabled
-
-	if enabled then
-		button.Text = "HITBOX : ON"
-		button.BackgroundColor3 = Color3.fromRGB(50,200,50)
-
-		for _, plr in pairs(Players:GetPlayers()) do
-			if plr.Character then
-				createHitbox(plr.Character)
-			end
-		end
-	else
-		button.Text = "HITBOX : OFF"
-		button.BackgroundColor3 = Color3.fromRGB(200,50,50)
-		removeHitboxes()
-	end
-end
-
--- Click nút
-button.MouseButton1Click:Connect(toggleHitbox)
-
--- Phím F
-UIS.InputBegan:Connect(function(input, gpe)
-	if gpe then return end
-	if input.KeyCode == Enum.KeyCode.F then
-		toggleHitbox()
-	end
-end)
-
--- Player mới
-Players.PlayerAdded:Connect(function(plr)
-	plr.CharacterAdded:Connect(function(char)
-		if enabled then
-			task.wait(1)
-			createHitbox(char)
-		end
-	end)
-end)	local box = Instance.new("BoxHandleAdornment")
-	box.Name = "LocalHitbox"
-	box.Size = Vector3.new(6, 7, 6)
-	box.Adornee = hrp
-	box.AlwaysOnTop = true
-	box.ZIndex = 10
-	box.Transparency = 0.5
-	box.Color3 = Color3.fromRGB(255, 0, 0)
-	box.Parent = hrp
-
-	hitboxes[char] = box
-end
-
--- Xoá hitbox
-local function removeHitboxes()
-	for _, v in pairs(hitboxes) do
-		if v then v:Destroy() end
-	end
-	hitboxes = {}
-end
-
--- Bật / tắt
-button.MouseButton1Click:Connect(function()
-	enabled = not enabled
-
-	if enabled then
-		button.Text = "HITBOX : ON"
-		button.BackgroundColor3 = Color3.fromRGB(50,200,50)
-
-		for _, plr in pairs(Players:GetPlayers()) do
-			if plr.Character then
-				createHitbox(plr.Character)
-			end
-		end
-	else
-		button.Text = "HITBOX : OFF"
-		button.BackgroundColor3 = Color3.fromRGB(200,50,50)
-		removeHitboxes()
-	end
-end)
-
--- Player mới vào
 Players.PlayerAdded:Connect(function(plr)
 	plr.CharacterAdded:Connect(function(char)
 		if enabled then
